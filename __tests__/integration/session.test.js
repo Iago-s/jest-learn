@@ -23,6 +23,19 @@ describe('Authentication', () => {
     expect(response.status).toBe(200);
   });
 
+  it('should return 404 error when there is no user with email', async () => {
+    const user = await factory.create('User', {
+      password: '123456',
+    });
+
+    const response = await request(app).post('/sessions').send({
+      email: 'email@email.com',
+      password: '123456',
+    });
+
+    expect(response.status).toBe(404);
+  });
+
   it('should not authenticate with invalid credentials', async () => {
     const user = await factory.create('User', {
       password: '123456',
